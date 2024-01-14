@@ -1,34 +1,34 @@
+"use client";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
 
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  fetch("/api/rsvp", {
-    method: "POST",
-    body: JSON.stringify({
-      name: name,
-      email: email,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log("Submitted");
-};
-
-const handleNameChange = (e) => {
-  setName(e.target.value);
-};
-
-const handleEmailChange = (e) => {
-  setEmail(e.target.value);
-};
-
 export default function Home() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("/api/rsvp", {
+      method: "POST",
+      body: JSON.stringify({
+        name: name,
+        email: email,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Submitted");
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
   return (
     <div key="1" className="flex flex-col min-h-screen">
       <main className="flex-1">
