@@ -2,33 +2,48 @@
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import Airtable from "airtable";
+const base = new Airtable({ apiKey: `${process.env.AIRTABLE_API_SECRET}` }).base(
+  "appWHG3dDhnwnzjOI"
+);
 
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch("/api/rsvp", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        email: email,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log("Submitted");
+
+    try {
+      const records = await base("RSVP").create([
+        {
+          fields: {
+            Email: email,
+            Name: name,
+          },
+        },
+      ]);
+
+      records.forEach(function (record) {
+        console.log(record.getId());
+      });
+
+      console.log("Submitted");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
+    console.log("Name:", e.target.value);
   };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    console.log("Email:", e.target.value);
   };
+
   return (
     <div key="1" className="flex flex-col min-h-screen">
       <main className="flex-1">
@@ -44,7 +59,10 @@ export default function Home() {
                   India.
                 </p>
                 <div className="w-full max-w-sm space-y-2">
-                  <form className="flex flex-col space-y-2">
+                  <form
+                    className="flex flex-col space-y-2"
+                    onSubmit={handleSubmit}
+                  >
                     <Input
                       className="max-w-lg flex-1"
                       placeholder="Enter your name"
@@ -57,9 +75,7 @@ export default function Home() {
                       type="email"
                       onChange={handleEmailChange}
                     />
-                    <Button type="submit" onCLick={handleSubmit}>
-                      RSVP
-                    </Button>
+                    <Button type="submit">RSVP</Button>
                   </form>
                 </div>
               </div>
