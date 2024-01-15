@@ -1,9 +1,9 @@
 import { Ubuntu_Mono } from 'next/font/google'
 import './globals.css'
-import Header from './components/Header'
+import Header from './components/Header.jsx'
 
 const mono = Ubuntu_Mono({ subsets: ['latin'], weight: "400" })
-import { ThemeProvider } from "./components/theme-provider"
+import { ThemeProvider } from "./components/theme-provider.jsx"
 
 
 export const metadata = {
